@@ -8,7 +8,7 @@
 //접속 인원의 한계 미리 정해둠 
 //이 한계를 넘는 인원 들어오는 경우 대기열 서버로 넘겨줌
 //리눅스는 모든 것을 파일 형태로 관리 -> 소켓 = 파일
-#define FD_NUMBER 100
+#define USER_MAXIMUM 100
 //틱레이트 설정
 #define TICK_RATE 16
 
@@ -51,8 +51,8 @@ public:
 
 
 //전역변수 선언란//
-struct pollfd pollFDArray[FD_NUMBER];
-UserData* userFDArray[FD_NUMBER];
+struct pollfd pollFDArray[USER_MAXIMUM];
+UserData* userFDArray[USER_MAXIMUM];
 
 //전연변수 선언란//
 
@@ -125,7 +125,50 @@ int main() {
 
 	if(StartServer(&listenFD)) return -4;
 
-	cout << "Hello Linex" << endl;
+	cout << "서버가 정상적으로 실행되었습니다" << endl;
+
+	//pollFDArray = 내가 연락을 기다리고 있는 대상들
+	//처음에는 연락할 대상이 없다는 것 확인
+	for(int i = 0; i< USER_MAXIMUM; i++) {
+		//-1 이 없다는 뜻
+		pollFDArray[i].FD = -1;
+	}
+
+	pollFDArray[0].fd = listenFD;
+	//읽기 대기중
+	pollFDArray[0].events = POLLIN;
+	pollFDArray[0].revents = 0;
+
+	for(;;) {
+		//누군가 메세지를 건내준다면 움직임, 메세지 있는지 없는지 확인
+		result = poll(pollFDArray, USER_MAXIMUM, -1);
+
+		//메세지가 있어야만 뭔가 할 것임
+		if(result > 0) {
+			//0번 = 리슨소켓 -> 0번에 들어오려고 하는 애들을 체크
+			if(pollFDArray[0].revents = POLLIN) {
+				connectFD = accept(listenFD, (struct sockaddr*)&connectSocket, &addressSize);
+
+				//빈 자리 탐색
+				for(int i =1; i < USER_MAXIMUM; i++){
+					if(pollFDArray[i].fd == -1) {
+						pollFDArray[i].fd = connectFD;
+						pollFDArray[i].revents = 0;
+
+						//새로운 유저 정보 생성
+						userFDArray[i] = new UserData();
+						//너가 이 자리에 있는 거야
+						userFDArray[i]->FDNumber = i;
+
+						break;
+					}
+				}
+			}
+		}
+
+	}
+
+
 	return -4;
 }
 
