@@ -131,7 +131,7 @@ int main() {
 	//처음에는 연락할 대상이 없다는 것 확인
 	for(int i = 0; i< USER_MAXIMUM; i++) {
 		//-1 이 없다는 뜻
-		pollFDArray[i].FD = -1;
+		pollFDArray[i].fd = -1;
 	}
 
 	pollFDArray[0].fd = listenFD;
