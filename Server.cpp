@@ -8,7 +8,7 @@
 //접속 인원의 한계 미리 정해둠 
 //이 한계를 넘는 인원 들어오는 경우 대기열 서버로 넘겨줌
 //리눅스는 모든 것을 파일 형태로 관리 -> 소켓 = 파일
-#define FD_NUMBER
+#define FD_NUMBER 100
 //틱레이트 설정
 #define TICK_RATE 16
 
