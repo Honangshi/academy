@@ -46,7 +46,7 @@ public:
 		cout << "유저 연결이 종료되었습니다." << endl;
 	}
 
-}
+};
 
 
 
@@ -63,12 +63,12 @@ bool StartServer(int* currentFD) {
 		//오류 발생
 		perror("socket()");
 		//혹시 모르니 close도 놓고
-		close();
+		close(*currentFD);
 
 		return true;
 	}
 	//소켓에는 IP와 포트가 있음
-	sockarr_in address;
+	sockaddr_in address;
 
 	memset(&address, 0, sizeof(address));
 
