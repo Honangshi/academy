@@ -36,7 +36,7 @@ using namespace std;
 class UserData {
 public:
 	//본인이 타고 있는  소켓의 번호 저장
-	int FD_NUMBER = 0;
+	int FD_NUMBER  0;
 
 	UserData() {
 		cout << "유저데이터가 생성되었습니다." << endl;
