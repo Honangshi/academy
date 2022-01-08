@@ -51,7 +51,7 @@ public:
 
 
 //전역변수 선언란//
-struct poll pollFDArray[FD_NUMBER];
+struct pollfd pollFDArray[FD_NUMBER];
 UserData* userFDArray[FD_NUMBER];
 
 //전연변수 선언란//
