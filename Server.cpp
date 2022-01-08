@@ -57,7 +57,7 @@ UserData* userFDArray[FD_NUMBER];
 //전연변수 선언란//
 
 //currentFD는 현재 리슨 소켓으로 사용할 녀석을 넣어줌
-bool ServerStart(int* currentFD) {
+bool StartServer(int* currentFD) {
 	//위에서 못 만들어 왔을때
 	if (*currentFD == -1) {
 		//오류 발생
