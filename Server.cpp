@@ -182,6 +182,7 @@ int main() {
 					}
 
 					cout << buffRecv << endl;
+					break;
 				default:
 					break;
 				}
