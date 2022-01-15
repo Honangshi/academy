@@ -146,7 +146,7 @@ int main() {
 		//메세지가 있어야만 뭔가 할 것임
 		if(result > 0) {
 			//0번 = 리슨소켓 -> 0번에 들어오려고 하는 애들을 체크
-			if(pollFDArray[0].revents = POLLIN) {
+			if(pollFDArray[0].revents == POLLIN) {
 				connectFD = accept(listenFD, (struct sockaddr*)&connectSocket, &addressSize);
 
 				//빈 자리 탐색
