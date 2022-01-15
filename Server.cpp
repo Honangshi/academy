@@ -231,11 +231,13 @@ int main() {
 					//메세지 해석
 					//숫자 같은 의미 해석하기 힘든 내용 처리
 					CheckMessage(buffRecv, BUFF_SIZE);
+					//버퍼 초기화
+					memset(buffRecv, 0, BUFF_SIZE);
+
 					break;
 				};
 			}
-			//버퍼를 초기화
-			memset(buffRecv, 0, BUFF_SIZE);
+
 		};
 	};
 
