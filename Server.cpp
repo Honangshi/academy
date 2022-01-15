@@ -160,6 +160,9 @@ int main() {
 						//너가 이 자리에 있는 거야
 						userFDArray[i]->FDNumber = i;
 
+						//유저에게 반갑다고 인사
+						write(pollFDArray[i]->FDNumber, "Hi", 4);
+
 						break;
 					}
 				}
