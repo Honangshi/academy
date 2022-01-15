@@ -168,6 +168,7 @@ int main() {
 				}
 			}
 			for (int i = 1; i < USER_MAXIMUM; i++) {
+				cout << i << endl;
 				switch (pollFDArray[i].revents)
 				{
 					//아무것도 없음
