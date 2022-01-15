@@ -234,6 +234,8 @@ int main() {
 					break;
 				};
 			}
+			//버퍼를 초기화
+			memset(buffRecv, 0, BUFF_SIZE);
 		};
 	};
 
