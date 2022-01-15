@@ -186,9 +186,6 @@ int main() {
 					cout << "아래" << endl;
 					cout << buffRecv << endl;
 					break;
-				default:
-					cout << i << endl;
-					break;
 				}
 			}
 
