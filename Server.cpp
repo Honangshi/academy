@@ -175,6 +175,7 @@ int main() {
 				case 0: break;
 					//무언가 옴
 				case POLLIN:
+					cout << "위" << endl;
 					//read와 받는 버퍼를 이용해서 읽었는데 아무것도 없음 = 클라이언트가 연결을 끊겠다는 의미
 					if (read(pollFDArray[i].fd, buffRecv, BUFF_SIZE) < 1) {
 
@@ -182,7 +183,7 @@ int main() {
 						pollFDArray[i].fd = -1;
 						break;
 					}
-
+					cout << "아래" << endl;
 					cout << buffRecv << endl;
 					break;
 				default:
