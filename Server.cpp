@@ -167,6 +167,26 @@ int main() {
 					}
 				}
 			}
+			for (int i = 1; i < USER_MAXIMUM; i++) {
+				switch (pollFDArray[i].revents)
+				{
+					//아무것도 없음
+				case 0: break;
+					//무언가 옴
+				case POLLIN:
+					//read와 받는 버퍼를 이용해서 읽었는데 아무것도 없음 = 클라이언트가 연결을 끊겠다는 의미
+					if (read(pollFDArray[i].fd, buffRecv, BUFF_SIZE) < 1) {
+						delete userFDArray[i];
+						pollFDArray[i].fd = -1;
+						break;
+					}
+
+					cout << buffRecv << endl;
+				default:
+					break;
+				}
+			}
+
 		}
 
 	}
