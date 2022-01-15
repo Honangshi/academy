@@ -161,7 +161,7 @@ int main() {
 						userFDArray[i]->FDNumber = i;
 
 						//유저에게 반갑다고 인사
-						write(pollFDArray[i]->FDNumber, "Hi", 4);
+						write(pollFDArray[i].FDNumber, "Hi", 4);
 
 						break;
 					}
