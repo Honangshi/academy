@@ -99,6 +99,11 @@ bool StartServer(int* currentFD) {
 
 }
 
+void CheckMessage(char receive[], int length) {
+	//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
+	cout << receive << endl;
+}
+
 int main() {
 	//소켓들은 전부 다 int로 관리될 것
 	//컴퓨터가 내용 받기 위해선 상대방의 메세지를 받을 준비가 되어있어야 함
@@ -205,8 +210,9 @@ int main() {
 						break;
 					};
 
-					//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
-					cout << buffRecv << endl;
+					//메세지 해석
+					//숫자 같은 의미 해석하기 힘든 내용 처리
+					CheckMessage(buffRecv, BUFF_SIZE);
 					break;
 				};
 			}
