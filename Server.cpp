@@ -26,7 +26,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include <unistd.h>
-
+#include "ServerEnum.h"
 
 using namespace std;
 //전방선언//
