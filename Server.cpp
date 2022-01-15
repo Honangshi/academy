@@ -123,13 +123,13 @@ int main() {
 	memset(buffRecv, 0, sizeof(buffRecv));
 	memset(buffSend, 0, sizeof(buffSend));
 
-	if(StartServer(&listenFD)) return -4;
+	if (StartServer(&listenFD)) return -4;
 
 	cout << "서버가 정상적으로 실행되었습니다" << endl;
 
 	//pollFDArray = 내가 연락을 기다리고 있는 대상들
 	//처음에는 연락할 대상이 없다는 것 확인
-	for(int i = 0; i< USER_MAXIMUM; i++) {
+	for (int i = 0; i < USER_MAXIMUM; i++) {
 		//-1 이 없다는 뜻
 		pollFDArray[i].fd = -1;
 	}
@@ -139,62 +139,81 @@ int main() {
 	pollFDArray[0].events = POLLIN;
 	pollFDArray[0].revents = 0;
 
-	for(;;) {
-		//누군가 메세지를 건내준다면 움직임, 메세지 있는지 없는지 확인
+	//무한 반복!
+	for (;;)
+	{
+		//기다려요! 만약에 누군가가 저한테 메세지를 건네준다면! 그 때에서야 제가 움직이는 거에요!
+		//메세지가 있는지 없는지를 확인하는 방법!
 		result = poll(pollFDArray, USER_MAXIMUM, -1);
 
-		//메세지가 있어야만 뭔가 할 것임
-		if(result > 0) {
-			//0번 = 리슨소켓 -> 0번에 들어오려고 하는 애들을 체크
-			if(pollFDArray[0].revents == POLLIN) {
+		//메세지가 있어야만 뭔가 할 거에요!
+		if (result > 0)
+		{
+			//0번이 리슨 소켓이었습니다!
+			//0번에 들어오려고 하는 애들을 체크해주긴 해야 해요!
+			//                           누가 왔어?
+			if (pollFDArray[0].revents == POLLIN)
+			{
+				//들어오세요^^
 				connectFD = accept(listenFD, (struct sockaddr*)&connectSocket, &addressSize);
 
-				//빈 자리 탐색
-				for(int i =1; i < USER_MAXIMUM; i++){
-					if(pollFDArray[i].fd == -1) {
+				//어디보자... 자리가 있나..
+				//0번은 리슨 소켓이니까! 1번 부터 찾아봅시다!
+				for (int i = 1; i < USER_MAXIMUM; i++)
+				{
+					//여기있네!
+					if (pollFDArray[i].fd == -1)
+					{
 						pollFDArray[i].fd = connectFD;
+						pollFDArray[i].events = POLLIN;
 						pollFDArray[i].revents = 0;
 
-						//새로운 유저 정보 생성
+						//새로운 유저 정보를 생성합니다!
 						userFDArray[i] = new UserData();
-						//너가 이 자리에 있는 거야
+						//너가 이 자리에 있는 거야!
 						userFDArray[i]->FDNumber = i;
 
-						//유저에게 반갑다고 인사
-						write(pollFDArray[i].fd, "Hi", 4);
+						//유저한테 반갑다고 인사해줍시다!
+						write(pollFDArray[i].fd, "뭐 다양한 걸 써보실 수도 있겠죠?", 46);
 
 						break;
-					}
-				}
-			}
-			for (int i = 1; i < USER_MAXIMUM; i++) {
-				
+					};
+				};
+			};
+
+			//0번은 리슨 소켓이니까! 위에서 처리했으니까!
+			//1번부터 돌아주도록 하겠습니다!
+			for (int i = 1; i < USER_MAXIMUM; i++)
+			{
+				//이녀석이 저한테 무슨 내용을 전달을 해줬는지 보러갑시다!
 				switch (pollFDArray[i].revents)
 				{
-					//아무것도 없음
+					//암말도 안했어요! 그럼 무시!
 				case 0: break;
-					//무언가 옴
+					//뭔가 말할 때가 있겠죠!
 				case POLLIN:
-					cout << "위" << endl;
-					//read와 받는 버퍼를 이용해서 읽었는데 아무것도 없음 = 클라이언트가 연결을 끊겠다는 의미
-					if (read(pollFDArray[i].fd, buffRecv, BUFF_SIZE) < 1) {
-
+					//보낼 때는 write였는데, 받아올 때에는 read가 되겠죠!
+					//받는 용도의 버퍼를 사용해서 읽어주도록 합시다!
+					//버퍼를 읽어봤는데.. 세상에나! 아무것도 들어있지 않아요!
+					//굉장히 소름돋죠! 클라이언트가 뭔가 말을 했는데!
+					//열어봤더니 빈 봉투다...?
+					//이 상황은 클라이언트가 "연결을 끊겠다" 라는 의미입니다!
+					if (read(pollFDArray[i].fd, buffRecv, BUFF_SIZE) < 1)
+					{
 						delete userFDArray[i];
 						pollFDArray[i].fd = -1;
 						break;
-					}
-					cout << "아래" << endl;
+					};
+
+					//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
 					cout << buffRecv << endl;
 					break;
-				}
+				};
 			}
-
-		}
-
-	}
+		};
+	};
 
 
 	return -4;
 }
-
 
