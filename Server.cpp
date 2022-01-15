@@ -100,8 +100,19 @@ bool StartServer(int* currentFD) {
 }
 
 void CheckMessage(char receive[], int length) {
-	//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
-	cout << receive << endl;
+
+	switch (receive[0])
+	{
+	case Chat:
+		//맨 앞 1바이트는 메세지 구분용
+		char* value = new char[length -1]
+			//			맨 앞 1 바이트
+		memcpy(value, receive + 1, length -1)
+		//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
+		cout << receive << endl;
+		break;
+	}
+
 }
 
 int main() {
