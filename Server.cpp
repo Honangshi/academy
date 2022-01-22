@@ -113,9 +113,28 @@ void CheckMessage(char receive[], int length) {
 		for (int i = 1; i < USER_MAXIMUM; i++) {
 			if (pollFDArray[i].fd != -1) {
 				//유저한테 채팅내용을 전달해줌
-				write(pollFDArray[i].fd, receive, length);
+				write(pollFDArray[i].fd, receive, length-1);
 			}
 		}
+
+
+		break;
+
+	case Move:
+		//맨 앞 1바이트는 메세지 구분용
+		char* value = new char[length - 1];
+		//			맨 앞 1 바이트
+		memcpy(value, receive + 1, length - 1);
+		//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
+		cout << "이동" << endl;
+
+		for (int i = 1; i < USER_MAXIMUM; i++) {
+			if (pollFDArray[i].fd != -1) {
+				//유저한테 채팅내용을 전달해줌
+				write(pollFDArray[i].fd, receive, length-1);
+			}
+		}
+
 
 
 		break;
