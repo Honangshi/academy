@@ -139,7 +139,7 @@ void CheckMessage(char receive[], int length) {
 		}
 	}
 	catch (exception& e) {
-		cout << e << endl;
+		cout << e.what() << endl;
 	}
 	//value는 다 썻으니 지움
 	delete[] value;
