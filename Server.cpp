@@ -85,6 +85,9 @@ public:
 		if (write(pollFDArray[FDNumber].fd, currentMessage, BUFF_SIZE) != -1) {
 			//성공했을 때에만 빼주기
 			messageQueue.pop();
+
+			//메세지 보냈으니 메모리에서도 제거
+			delete currentMessage
 		}
 	}
 
