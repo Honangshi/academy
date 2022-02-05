@@ -275,9 +275,9 @@ int main() {
 									intChanger.IntValue = j;
 									for (int k = 0; k < 4; k++) {
 										message[k + 1] = intChanger.charArray[k];
+										//새로 들어온 유저에게 이 유저를 전달
+										write(pollFDArray[i].fd, userNumberMessage, 5);
 									}
-									//새로 들어온 유저에게 이 유저를 전달
-									write(pollFDArray[i].fd, userNumberMessage, 5);
 								}
 							}
 
@@ -329,8 +329,28 @@ int main() {
 
 
 						break;
+
+					case default:
+
+						delete userFDArray[i];
+						pollFDArray[i].fd = -1;
+
+						char message[5];
+						message[0] = Exit;
+						intChanger.IntValue = i;
+						for (int k = 0; k < 4; k++) {
+							message[k + 1] = intChanger.charArray[k];
+						}
+
+						//새로운 유저가 도착했다고 알려줌
+						for (int j = 1; j < USER_MAXIMUM; j++) {
+							if (pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
+						}
+
+						break;
 					};
 					//버퍼 초기화
+					memset(buffSend, 0, BUFF_SIZE);
 					memset(buffRecv, 0, BUFF_SIZE);
 				}
 				memset(buffSend, 0, sizeof(buffSend));
