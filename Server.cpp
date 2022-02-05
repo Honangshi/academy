@@ -273,11 +273,10 @@ int main() {
 									userNumberMessage[0] = Join;
 									//이미 있던 유저의 아이디 전달
 									intChanger.IntValue = j;
-									for (int k = 0; k < 4; k++) {
+									for (int k = 0; k < 4; k++) 
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
-										write(pollFDArray[i].fd, userNumberMessage, 5);
-									}
+										write(pollFDArray[0].fd, userNumberMessage, 5);
 								}
 							}
 
