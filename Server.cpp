@@ -33,10 +33,24 @@ using namespace std;
 
 //전방선언//
 
+//union은 저 두개를 같은 메모리에서 사용하게 함
+union FloatUnion
+{
+	float floatValue;
+	char charArray[4];
+};
+
+//부동소수점실수와 문자배열을 왔다갔다할 수 있게끔 도와주는 징검다리
+FloatUnion floatChanger;
+
 class UserData {
 public:
 	//본인이 타고 있는  소켓의 번호 저장
 	int FDNumber = 0;
+	//목적지 x, y, z
+	float destinationX, destinationY, destinationZ;
+	//위치 x, y, z
+	float locationX, locationY, locationZ;
 
 	UserData() {
 		cout << "유저데이터가 생성되었습니다." << endl;
@@ -99,7 +113,7 @@ bool StartServer(int* currentFD) {
 
 }
 
-void CheckMessage(char receive[], int length) {
+void CheckMessage(int userNumber, char receive[], int length) {
 
 	//맨 앞 1바이트는 메세지 구분용
 	char* value = new char[length - 1];
@@ -126,9 +140,21 @@ void CheckMessage(char receive[], int length) {
 			//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
 			cout << "이동" << endl;
 
+			//배열의 1번칸부터 4번칸까지 floatChanger에게 넣어줌
+			for (int i = 0; i < 4; i++) floatChanger.charArray[i] = receive[i + 1];
+
+			//목적지x 같은 경우는 float값이기 때문에 float로 변환해서 저장
+			userFDArray[userNumber]->destinationX = floatChanger.floatValue;
+
+			for (int i = 0; i < 4; i++) floatChanger.charArray[i] = receive[i + 5];
+			userFDArray[userNumber]->destinationY = floatChanger.floatValue;
+
+			for (int i = 0; i < 4; i++) floatChanger.charArray[i] = receive[i + 9];
+			userFDArray[userNumber]->destinationZ = floatChanger.floatValue;
+
 			for (int i = 1; i < USER_MAXIMUM; i++) {
 				if (pollFDArray[i].fd != -1) {
-					//유저한테 채팅내용을 전달해줌
+					//유저한테 이동내용을 전달해줌
 					write(pollFDArray[i].fd, receive, length - 1);
 				}
 			}
