@@ -42,7 +42,7 @@ union FloatUnion
 
 union IntUnion
 {
-	float IntValue;
+	int IntValue;
 	char charArray[4];
 };
 
@@ -252,7 +252,6 @@ int main() {
 						intChanger.IntValue = i;
 						for (int k = 0; k < 4; k++) {
 							message[k + 1] = intChanger.charArray[k];
-							cout << message[k + 1] << endl;
 						}
 
 						//새로운 유저가 도착했다고 알려줌
