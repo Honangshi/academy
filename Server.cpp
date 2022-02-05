@@ -249,7 +249,7 @@ int main() {
 
 						char message[5];
 						message[0] = Join;
-						intChanger.IntValue = i;
+						intChanger.IntValue = 1000;
 						for (int k = 0; k < 4; k++) message[k + 1] = intChanger.charArray[k];
 
 						//새로운 유저가 도착했다고 알려줌
