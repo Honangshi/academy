@@ -21,6 +21,8 @@
 //플레이어들을 계속 순회하면서 자연스럽게 나에게 준 사용자가 있는 경우에만
 #include <poll.h>
 
+#include <queue>
+
 //얼마나 시간이 니났는지 체크를 해야 틱레이트 계산 가능
 #include <sys/time.h>
 #include <sys/types.h>
@@ -52,12 +54,36 @@ IntUnion intChanger;
 
 class UserData {
 public:
+
+	queue<char*> messageQueue;
+
+
 	//본인이 타고 있는  소켓의 번호 저장
 	int FDNumber = 0;
 	//목적지 x, y, z
 	float destinationX, destinationY, destinationZ;
 	//위치 x, y, z
 	float locationX, locationY, locationZ;
+
+	void MessageQueueing(char* wantMessage) {
+		//원하는 메세지를 유저에게 전달 but 즉시 전달 x
+		//다음 틱레이트에 도착했을 때 보냄
+		messageQueue.push(wantMessage);
+
+	}
+
+	void MessageSend() {
+		//실제 메세지를 전달해주는 방법
+		if (messageQueue.empty()) return;
+
+		//가장 오래 기다린 메세지
+		char* currentMessage = messageQueue.front();
+		//현재 메세지를 전달, write는 실패했을 때 -1 리턴
+		if (write(pollFDArray[FDNumber].fd, currentMessage, BUFF_SIZE) != -1) {
+			//성공했을 때에만 빼주기
+			messageQueue.pop();
+		}
+	}
 
 	UserData() {
 		cout << "유저데이터가 생성되었습니다." << endl;
@@ -269,17 +295,17 @@ int main() {
 									write(pollFDArray[j].fd, message, 5);
 
 									//원래 유저가 있었던 것 알려줌
-									char userNumberMessage[5];
+									char* userNumberMessage = new char[5];
 									userNumberMessage[0] = Join;
 									//이미 있던 유저의 아이디 전달
 									intChanger.IntValue = j;
 									for (int k = 0; k < 4; k++) 
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
-										write(pollFDArray[i].fd, userNumberMessage, 5);
+										userFDArray[i]->messageQueueing(userNumberMessage, 5);
 								}
 							}
-
+							userFDArray[i]->MessageSend();
 							break;
 						};
 					};
@@ -349,11 +375,11 @@ int main() {
 						break;
 					};
 					//버퍼 초기화
-					memset(buffSend, 0, BUFF_SIZE);
-					memset(buffRecv, 0, BUFF_SIZE);
+					//memset(buffSend, 0, BUFF_SIZE);
+					//memset(buffRecv, 0, BUFF_SIZE);
 				}
-				memset(buffSend, 0, sizeof(buffSend));
-				memset(buffRecv, 0, sizeof(buffRecv));
+				//memset(buffSend, 0, sizeof(buffSend));
+				//memset(buffRecv, 0, sizeof(buffRecv));
 
 			};
 		};
