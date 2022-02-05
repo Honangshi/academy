@@ -179,150 +179,167 @@ void CheckMessage(int userNumber, char receive[], int length) {
 }
 
 int main() {
-	//소켓들은 전부 다 int로 관리될 것
-	//컴퓨터가 내용 받기 위해선 상대방의 메세지를 받을 준비가 되어있어야 함
-	//보통은 소켓이 닫혀 있지만 이미 그 주소로 메세지를 보냈다면 열림 아니면 무시
-	//소켓을 열어주는 소켓 필요 => 소켓 하나를 리슨소켓으로 만듦
-	//"접속 요청"만 받아주는 소켓을 여는 것. 누군가 접속 요청 하면 비어있는 소켓 하나에 연결 -> 하나의 창구
-			//IPv4로 연결을 받음, 연결 지속시킴
-	int listenFD = socket(AF_INET, SOCK_STREAM, 0);
-	//연결할 FD
-	int connectFD;
-	int result = 0;
+	try() {
+		//소켓들은 전부 다 int로 관리될 것
+		//컴퓨터가 내용 받기 위해선 상대방의 메세지를 받을 준비가 되어있어야 함
+		//보통은 소켓이 닫혀 있지만 이미 그 주소로 메세지를 보냈다면 열림 아니면 무시
+		//소켓을 열어주는 소켓 필요 => 소켓 하나를 리슨소켓으로 만듦
+		//"접속 요청"만 받아주는 소켓을 여는 것. 누군가 접속 요청 하면 비어있는 소켓 하나에 연결 -> 하나의 창구
+				//IPv4로 연결을 받음, 연결 지속시킴
+		int listenFD = socket(AF_INET, SOCK_STREAM, 0);
+		//연결할 FD
+		int connectFD;
+		int result = 0;
 
-	struct sockaddr_in listenSocket, connectSocket;
-	socklen_t addressSize;
+		struct sockaddr_in listenSocket, connectSocket;
+		socklen_t addressSize;
 
-	//받는 버퍼
-	char buffRecv[BUFF_SIZE];
-	//주는 버버
-	char buffSend[BUFF_SIZE];
+		//받는 버퍼
+		char buffRecv[BUFF_SIZE];
+		//주는 버버
+		char buffSend[BUFF_SIZE];
 
-	//0으로 초기화
-	memset(buffRecv, 0, sizeof(buffRecv));
-	memset(buffSend, 0, sizeof(buffSend));
+		//0으로 초기화
+		memset(buffRecv, 0, sizeof(buffRecv));
+		memset(buffSend, 0, sizeof(buffSend));
 
-	if (StartServer(&listenFD)) return -4;
+		if (StartServer(&listenFD)) return -4;
 
-	cout << "서버가 정상적으로 실행되었습니다" << endl;
+		cout << "서버가 정상적으로 실행되었습니다" << endl;
 
-	//pollFDArray = 내가 연락을 기다리고 있는 대상들
-	//처음에는 연락할 대상이 없다는 것 확인
-	for (int i = 0; i < USER_MAXIMUM; i++) {
-		//-1 이 없다는 뜻
-		pollFDArray[i].fd = -1;
-	}
+		//pollFDArray = 내가 연락을 기다리고 있는 대상들
+		//처음에는 연락할 대상이 없다는 것 확인
+		for (int i = 0; i < USER_MAXIMUM; i++) {
+			//-1 이 없다는 뜻
+			pollFDArray[i].fd = -1;
+		}
 
-	pollFDArray[0].fd = listenFD;
-	//읽기 대기중
-	pollFDArray[0].events = POLLIN;
-	pollFDArray[0].revents = 0;
+		pollFDArray[0].fd = listenFD;
+		//읽기 대기중
+		pollFDArray[0].events = POLLIN;
+		pollFDArray[0].revents = 0;
 
-	//무한 반복!
-	for (;;)
-	{
-		//기다려요! 만약에 누군가가 저한테 메세지를 건네준다면! 그 때에서야 제가 움직이는 거에요!
-		//메세지가 있는지 없는지를 확인하는 방법!
-		result = poll(pollFDArray, USER_MAXIMUM, -1);
-
-		//메세지가 있어야만 뭔가 할 거에요!
-		if (result > 0)
+		//무한 반복!
+		for (;;)
 		{
-			//0번이 리슨 소켓이었습니다!
-			//0번에 들어오려고 하는 애들을 체크해주긴 해야 해요!
-			//                           누가 왔어?
-			if (pollFDArray[0].revents == POLLIN)
-			{
-				//들어오세요^^
-				connectFD = accept(listenFD, (struct sockaddr*)&connectSocket, &addressSize);
+			//기다려요! 만약에 누군가가 저한테 메세지를 건네준다면! 그 때에서야 제가 움직이는 거에요!
+			//메세지가 있는지 없는지를 확인하는 방법!
+			result = poll(pollFDArray, USER_MAXIMUM, -1);
 
-				//어디보자... 자리가 있나..
-				//0번은 리슨 소켓이니까! 1번 부터 찾아봅시다!
+			//메세지가 있어야만 뭔가 할 거에요!
+			if (result > 0)
+			{
+				//0번이 리슨 소켓이었습니다!
+				//0번에 들어오려고 하는 애들을 체크해주긴 해야 해요!
+				//                           누가 왔어?
+				if (pollFDArray[0].revents == POLLIN)
+				{
+					//들어오세요^^
+					connectFD = accept(listenFD, (struct sockaddr*)&connectSocket, &addressSize);
+
+					//어디보자... 자리가 있나..
+					//0번은 리슨 소켓이니까! 1번 부터 찾아봅시다!
+					for (int i = 1; i < USER_MAXIMUM; i++)
+					{
+						//여기있네!
+						if (pollFDArray[i].fd == -1)
+						{
+							pollFDArray[i].fd = connectFD;
+							pollFDArray[i].events = POLLIN;
+							pollFDArray[i].revents = 0;
+
+							char message[5];
+							message[0] = Join;
+							intChanger.IntValue = i;
+							for (int k = 0; k < 4; k++) {
+								message[k + 1] = intChanger.charArray[k];
+							}
+
+
+							//새로운 유저 정보를 생성합니다!
+							userFDArray[i] = new UserData();
+							//너가 이 자리에 있는 거야!
+							userFDArray[i]->FDNumber = i;
+
+
+							//새로운 유저가 도착했다고 알려줌
+							for (int j = 1; j < USER_MAXIMUM; j++) {
+								if (pollFDArray[j].fd != -1) {
+									//모든 유저들에게 새로운 유저 출현 알림
+									write(pollFDArray[j].fd, message, 5);
+
+									//원래 유저가 있었던 것 알려줌
+									char userNumberMessage[5];
+									userNumberMessage[0] = Join;
+									//이미 있던 유저의 아이디 전달
+									intChanger.IntValue = j;
+									for (int k = 0; k < 4; k++) {
+										message[k + 1] = intChanger.charArray[k];
+									}
+									//새로 들어온 유저에게 이 유저를 전달
+									write(pollFDArray[i].fd, userNumberMessage, 5);
+								}
+							}
+
+							break;
+						};
+					};
+				};
+
+				//0번은 리슨 소켓이니까! 위에서 처리했으니까!
+				//1번부터 돌아주도록 하겠습니다!
 				for (int i = 1; i < USER_MAXIMUM; i++)
 				{
-					//여기있네!
-					if (pollFDArray[i].fd == -1)
+					//이녀석이 저한테 무슨 내용을 전달을 해줬는지 보러갑시다!
+					switch (pollFDArray[i].revents)
 					{
-						pollFDArray[i].fd = connectFD;
-						pollFDArray[i].events = POLLIN;
-						pollFDArray[i].revents = 0;
+						//암말도 안했어요! 그럼 무시!
+					case 0: break;
+						//뭔가 말할 때가 있겠죠!
+					case POLLIN:
+						//보낼 때는 write였는데, 받아올 때에는 read가 되겠죠!
+						//받는 용도의 버퍼를 사용해서 읽어주도록 합시다!
+						//버퍼를 읽어봤는데.. 세상에나! 아무것도 들어있지 않아요!
+						//굉장히 소름돋죠! 클라이언트가 뭔가 말을 했는데!
+						//열어봤더니 빈 봉투다...?
+						//이 상황은 클라이언트가 "연결을 끊겠다" 라는 의미입니다!
+						if (read(pollFDArray[i].fd, buffRecv, BUFF_SIZE) < 1)
+						{
+							delete userFDArray[i];
+							pollFDArray[i].fd = -1;
 
-						char message[5];
-						message[0] = Join;
-						intChanger.IntValue = i;
-						for (int k = 0; k < 4; k++) {
-							message[k + 1] = intChanger.charArray[k];
-						}
+							char message[5];
+							message[0] = Exit;
+							intChanger.IntValue = i;
+							for (int k = 0; k < 4; k++) {
+								message[k + 1] = intChanger.charArray[k];
+							}
 
-						//새로운 유저가 도착했다고 알려줌
-						for (int j = 1; j < USER_MAXIMUM; j++) {
-							if(pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
-						}
+							//새로운 유저가 도착했다고 알려줌
+							for (int j = 1; j < USER_MAXIMUM; j++) {
+								if (pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
+							}
 
-						//새로운 유저 정보를 생성합니다!
-						userFDArray[i] = new UserData();
-						//너가 이 자리에 있는 거야!
-						userFDArray[i]->FDNumber = i;
+							break;
+						};
 
+						//메세지 해석
+						//숫자 같은 의미 해석하기 힘든 내용 처리
+						CheckMessage(i, buffRecv, BUFF_SIZE);
 
 
 						break;
 					};
-				};
+					//버퍼 초기화
+					memset(buffRecv, 0, BUFF_SIZE);
+				}
+
 			};
-
-			//0번은 리슨 소켓이니까! 위에서 처리했으니까!
-			//1번부터 돌아주도록 하겠습니다!
-			for (int i = 1; i < USER_MAXIMUM; i++)
-			{
-				//이녀석이 저한테 무슨 내용을 전달을 해줬는지 보러갑시다!
-				switch (pollFDArray[i].revents)
-				{
-					//암말도 안했어요! 그럼 무시!
-				case 0: break;
-					//뭔가 말할 때가 있겠죠!
-				case POLLIN:
-					//보낼 때는 write였는데, 받아올 때에는 read가 되겠죠!
-					//받는 용도의 버퍼를 사용해서 읽어주도록 합시다!
-					//버퍼를 읽어봤는데.. 세상에나! 아무것도 들어있지 않아요!
-					//굉장히 소름돋죠! 클라이언트가 뭔가 말을 했는데!
-					//열어봤더니 빈 봉투다...?
-					//이 상황은 클라이언트가 "연결을 끊겠다" 라는 의미입니다!
-					if (read(pollFDArray[i].fd, buffRecv, BUFF_SIZE) < 1)
-					{
-						delete userFDArray[i];
-						pollFDArray[i].fd = -1;
-
-						char message[5];
-						message[0] = Exit;
-						intChanger.IntValue = i;
-						for (int k = 0; k < 4; k++) {
-							message[k + 1] = intChanger.charArray[k];
-						}
-
-						//새로운 유저가 도착했다고 알려줌
-						for (int j = 1; j < USER_MAXIMUM; j++) {
-							if (pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
-						}
-
-						break;
-					};
-
-					//메세지 해석
-					//숫자 같은 의미 해석하기 힘든 내용 처리
-					CheckMessage(i, buffRecv, BUFF_SIZE);
-
-
-					break;
-				};
-				//버퍼 초기화
-				memset(buffRecv, 0, BUFF_SIZE);
-			}
-
 		};
-	};
-
-
+	}
+	catch (exception& e) {
+		cout << e.what() << endl;
+	}
 	return -4;
 }
 
