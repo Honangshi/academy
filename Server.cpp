@@ -302,7 +302,7 @@ int main() {
 									for (int k = 0; k < 4; k++) 
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
-										userFDArray[i]->messageQueueing(userNumberMessage, 5);
+										userFDArray[i]->MessageQueueing(userNumberMessage, 5);
 								}
 							}
 							userFDArray[i]->MessageSend();
