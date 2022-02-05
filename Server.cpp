@@ -250,7 +250,10 @@ int main() {
 						char message[5];
 						message[0] = Join;
 						intChanger.IntValue = i;
-						for (int k = 0; k < 4; k++) message[k + 1] = intChanger.charArray[k];
+						for (int k = 0; k < 4; k++) {
+							message[k + 1] = intChanger.charArray[k];
+							cout << message[k + 1] << endl;
+						}
 
 						//새로운 유저가 도착했다고 알려줌
 						for (int j = 1; j < USER_MAXIMUM; j++) {
@@ -296,7 +299,6 @@ int main() {
 						intChanger.IntValue = i;
 						for (int k = 0; k < 4; k++) {
 							message[k + 1] = intChanger.charArray[k];
-							cout << message[k + 1] << endl;
 						}
 
 						//새로운 유저가 도착했다고 알려줌
