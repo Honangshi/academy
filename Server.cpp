@@ -32,7 +32,8 @@
 
 using namespace std;
 //전방선언//
-
+struct pollfd pollFDArray[USER_MAXIMUM];
+UserData* userFDArray[USER_MAXIMUM];
 //전방선언//
 
 //union은 저 두개를 같은 메모리에서 사용하게 함
@@ -98,8 +99,7 @@ public:
 
 
 //전역변수 선언란//
-struct pollfd pollFDArray[USER_MAXIMUM];
-UserData* userFDArray[USER_MAXIMUM];
+
 
 //전연변수 선언란//
 
