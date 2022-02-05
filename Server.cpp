@@ -179,7 +179,7 @@ void CheckMessage(int userNumber, char receive[], int length) {
 }
 
 int main() {
-	try() {
+	try {
 		//소켓들은 전부 다 int로 관리될 것
 		//컴퓨터가 내용 받기 위해선 상대방의 메세지를 받을 준비가 되어있어야 함
 		//보통은 소켓이 닫혀 있지만 이미 그 주소로 메세지를 보냈다면 열림 아니면 무시
