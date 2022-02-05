@@ -276,7 +276,7 @@ int main() {
 									for (int k = 0; k < 4; k++) 
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
-										write(pollFDArray[0].fd, userNumberMessage, 5);
+										write(pollFDArray[i].fd, userNumberMessage, 5);
 								}
 							}
 
