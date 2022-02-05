@@ -330,7 +330,7 @@ int main() {
 
 						break;
 
-					case default:
+					 default:
 
 						delete userFDArray[i];
 						pollFDArray[i].fd = -1;
