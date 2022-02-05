@@ -4,7 +4,9 @@
 typedef enum MessageType : char
 {
 	Chat = 1,
-	Move = 2,
+	Join,
+	Exit,
+	Move,
 }MessageType;
 
 #endif // !SERVER_ENUM

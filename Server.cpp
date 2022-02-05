@@ -40,8 +40,15 @@ union FloatUnion
 	char charArray[4];
 };
 
+union IntUnion
+{
+	float IntValue;
+	char charArray[4];
+};
+
 //부동소수점실수와 문자배열을 왔다갔다할 수 있게끔 도와주는 징검다리
 FloatUnion floatChanger;
+IntUnion intChanger;
 
 class UserData {
 public:
@@ -240,6 +247,16 @@ int main() {
 						pollFDArray[i].events = POLLIN;
 						pollFDArray[i].revents = 0;
 
+						char message[5];
+						message[0] = Join;
+						intChanger.IntValue = i;
+						for (int k = 0; k < 4 k++) message[k + 1] = intChanger.charArray[k];
+
+						//새로운 유저가 도착했다고 알려줌
+						for (int j = 1; j < USER_MAXIMUM; j++) {
+							if(pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
+						}
+
 						//새로운 유저 정보를 생성합니다!
 						userFDArray[i] = new UserData();
 						//너가 이 자리에 있는 거야!
@@ -273,12 +290,23 @@ int main() {
 					{
 						delete userFDArray[i];
 						pollFDArray[i].fd = -1;
+
+						char message[5];
+						message[0] = Exit;
+						intChanger.IntValue = i;
+						for (int k = 0; k < 4 k++) message[k + 1] = intChanger.charArray[k];
+
+						//새로운 유저가 도착했다고 알려줌
+						for (int j = 1; j < USER_MAXIMUM; j++) {
+							if (pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
+						}
+
 						break;
 					};
 
 					//메세지 해석
 					//숫자 같은 의미 해석하기 힘든 내용 처리
-					CheckMessage(buffRecv, BUFF_SIZE);
+					CheckMessage(i, buffRecv, BUFF_SIZE);
 
 
 					break;
