@@ -333,6 +333,8 @@ int main() {
 					//버퍼 초기화
 					memset(buffRecv, 0, BUFF_SIZE);
 				}
+				memset(buffSend, 0, sizeof(buffSend));
+				memset(buffRecv, 0, sizeof(buffRecv));
 
 			};
 		};
