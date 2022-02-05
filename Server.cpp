@@ -35,6 +35,9 @@ using namespace std;
 
 //전방선언//
 
+struct pollfd pollFDArray[USER_MAXIMUM];
+class UserData* userFDArray[USER_MAXIMUM];
+
 //union은 저 두개를 같은 메모리에서 사용하게 함
 union FloatUnion
 {
@@ -98,8 +101,7 @@ public:
 
 
 //전역변수 선언란//
-struct pollfd pollFDArray[USER_MAXIMUM];
-UserData* userFDArray[USER_MAXIMUM];
+
 
 //전연변수 선언란//
 
