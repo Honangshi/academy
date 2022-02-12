@@ -320,7 +320,6 @@ int main() {
 							//새로운 유저가 도착했다고 알려줌
 							for (int j = 1; j < USER_MAXIMUM; j++) {
 								if (pollFDArray[j].fd != -1) {
-									cout << i << endl;
 									//새로운 유저의 메세지 복사하기
 									char* currentUserMessage = new char[5];
 									memcpy(currentUserMessage, message, 5);
@@ -333,6 +332,7 @@ int main() {
 									userNumberMessage[0] = Join;
 									//이미 있던 유저의 아이디 전달
 									intChanger.IntValue = j;
+									cout << j << endl;
 									for (int k = 0; k < 4; k++) 
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
