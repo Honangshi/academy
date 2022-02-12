@@ -375,7 +375,7 @@ int main() {
 
 							//새로운 유저가 도착했다고 알려줌
 							for (int j = 1; j < USER_MAXIMUM; j++) {
-								if (userFDArray[j] != nullptr) {
+								if (i != j && userFDArray[j] != nullptr) {
 									char* currentUserMessage = new char[5];
 									memcpy(currentUserMessage, message, 5);
 									if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
