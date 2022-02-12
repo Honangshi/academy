@@ -186,9 +186,12 @@ void CheckMessage(int userNumber, char receive[], int length) {
 			//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
 			cout << value << endl;
 			for (int i = 1; i < USER_MAXIMUM; i++) {
-				if (pollFDArray[i].fd != -1) {
+				if (userFDArray[i] != nullptr) {
+					char* currentMessage;
+					memcpy(currentMessage, value, length);
 					//유저한테 채팅내용을 전달해줌
-					write(pollFDArray[i].fd, receive, length - 1);
+					userFDArray[i]->MessageQueueing();
+					//write(pollFDArray[i].fd, receive, length - 1);
 				}
 			}
 
