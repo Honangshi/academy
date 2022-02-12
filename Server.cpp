@@ -450,7 +450,7 @@ void* MessageSendThread(void* args) {
 		//poll은 연락이 올 때까지 기달림
 		for (int i = 0; i < USER_MAXIMUM; i++) {
 			//유저가 있다면 전달시도
-			if (pollFDArray[i].fd >= 0 && userFDArray[i] != nullptr) {
+			if (pollFDArray[i].fd > 0 && userFDArray[i] != nullptr) {
 				memset(buffSend, 0, BUFF_SIZE);
 				userFDArray[i]->MessageSend();
 			}
