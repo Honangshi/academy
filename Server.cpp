@@ -33,7 +33,7 @@
 
 using namespace std;
 //전방선언//
-void MessageSendThread();
+void MessageSendThread(void* args);
 //전방선언//
 
 struct pollfd pollFDArray[USER_MAXIMUM];
@@ -399,7 +399,7 @@ int main() {
 			};
 		};
 		//끝나면 스레드 종료!
-		pthread_cancel(&senderThread);
+		pthread_cancel(*senderThread);
 	}
 	catch (exception& e) {
 		cout << e.what() << endl;
@@ -412,7 +412,7 @@ int main() {
 
 
 
-void MessageSendThread() {
+void MessageSendThread(void* args) {
 	for (;;) {
 		//poll은 연락이 올 때까지 기달림
 		for (int i = 0; i < USER_MAXIMUM; i++) {
