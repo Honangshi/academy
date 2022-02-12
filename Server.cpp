@@ -308,8 +308,12 @@ int main() {
 							//새로운 유저가 도착했다고 알려줌
 							for (int j = 1; j < USER_MAXIMUM; j++) {
 								if (pollFDArray[j].fd != -1) {
+									//새로운 유저의 메세지 복사하기
+									char* currentUserMessage = new char[5];
+									memcpy(currentUserMessage, message, 5);
+
 									//모든 유저들에게 새로운 유저 출현 알림
-									write(pollFDArray[j].fd, message, 5);
+									userFDArray[i]->messageQueueing(currentUserMessage);
 
 									//원래 유저가 있었던 것 알려줌
 									char* userNumberMessage = new char[5];
