@@ -59,7 +59,7 @@ IntUnion intChanger;
 class UserData {
 public:
 
-	queue<char*> messageQueue;
+	queue<char*>* messageQueue = nullptr;
 
 
 	//본인이 타고 있는  소켓의 번호 저장
@@ -72,20 +72,20 @@ public:
 	void MessageQueueing(char* wantMessage) {
 		//원하는 메세지를 유저에게 전달 but 즉시 전달 x
 		//다음 틱레이트에 도착했을 때 보냄
-		messageQueue.push(wantMessage);
+		messageQueue->push(wantMessage);
 
 	}
 
 	void MessageSend() {
 		//실제 메세지를 전달해주는 방법
-		if (messageQueue.empty()) return;
+		if (messageQueue == nullptr || messageQueue->empty()) return;
 
 		//가장 오래 기다린 메세지
-		char* currentMessage = messageQueue.front();
+		char* currentMessage = messageQueue->front();
 		//현재 메세지를 전달, write는 실패했을 때 -1 리턴
 		if (write(pollFDArray[FDNumber].fd, currentMessage, BUFF_SIZE) != -1) {
 			//성공했을 때에만 빼주기
-			messageQueue.pop();
+			messageQueue->pop();
 
 			//메세지 보냈으니 메모리에서도 제거
 			delete currentMessage;
@@ -93,10 +93,12 @@ public:
 	}
 
 	UserData() {
+		messageQueue = new queue<char*>();
 		cout << "유저데이터가 생성되었습니다." << endl;
 	}
 
 	~UserData() {
+		delete messageQueue;
 		cout << "유저 연결이 종료되었습니다." << endl;
 	}
 
