@@ -187,8 +187,22 @@ void CheckMessage(int userNumber, char receive[], int length) {
 			cout << value << endl;
 			for (int i = 1; i < USER_MAXIMUM; i++) {
 				if (userFDArray[i] != nullptr) {
-					char* currentMessage = new char[length];
-					memcpy(currentMessage, receive, length);
+					int messageLength = 0;
+					//0이 나올때까지 확인
+					for (messageLength ; messageLength < length; messageLength++) {
+						if (value[messageLength] == 0) break;
+					}
+
+					// \0이 나오면 문자열의 끝
+					char* currentMessage = new char[messageLength + 2];
+					//이 메세지 타입은 chat입니다.
+					currentMessage[0] = Chat;
+					//누가 채팅을 한 것인지
+					currentMessage[1] = userNumber;
+
+					//메세지 내용을 여기에 전달
+					memcpy(currentMessage + 2, value, messageLength);
+
 					//유저한테 채팅내용을 전달해줌
 					userFDArray[i]->MessageQueueing(currentMessage);
 					//write(pollFDArray[i].fd, receive, length - 1);
@@ -200,18 +214,31 @@ void CheckMessage(int userNumber, char receive[], int length) {
 
 		case Move:
 			//이 아래쪽은 받는 버퍼의 내용을 가져왔을 때에만 여기 있겠죠!
-			cout << "이동" << endl;
+			// 메세지 구분 1바이트, 플레이어 구분 1바이트, (x, y, z) 각각 4바이트
+			char* currentMessage = new char[14];
+			currentMessage[0] = Move;
+			currentMessage[1] = userNumber;
 
 			//배열의 1번칸부터 4번칸까지 floatChanger에게 넣어줌
-			for (int i = 0; i < 4; i++) floatChanger.charArray[i] = receive[i + 1];
+			for (int i = 0; i < 4; i++) {
+				currentMessage[i + 2] = receive[i + 1];
+				floatChanger.charArray[i] = receive[i + 1];
+			}
 
 			//목적지x 같은 경우는 float값이기 때문에 float로 변환해서 저장
 			userFDArray[userNumber]->destinationX = floatChanger.floatValue;
 
-			for (int i = 0; i < 4; i++) floatChanger.charArray[i] = receive[i + 5];
+
+			for (int i = 0; i < 4; i++) {
+				currentMessage[i + 6] = receive[i + 1];
+				floatChanger.charArray[i] = receive[i + 5];
+			}
 			userFDArray[userNumber]->destinationY = floatChanger.floatValue;
 
-			for (int i = 0; i < 4; i++) floatChanger.charArray[i] = receive[i + 9];
+			for (int i = 0; i < 4; i++) {
+				currentMessage[i + 10] = receive[i + 1];
+				floatChanger.charArray[i] = receive[i + 9];
+			}
 			userFDArray[userNumber]->destinationZ = floatChanger.floatValue;
 
 			for (int i = 1; i < USER_MAXIMUM; i++) {
