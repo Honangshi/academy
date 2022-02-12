@@ -451,7 +451,6 @@ void* MessageSendThread(void* args) {
 		for (int i = 0; i < USER_MAXIMUM; i++) {
 			//유저가 있다면 전달시도
 			if (pollFDArray[i].fd > 0 && userFDArray[i] != nullptr) {
-				memset(buffSend, 0, BUFF_SIZE);
 				userFDArray[i]->MessageSend();
 			}
 		}
