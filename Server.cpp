@@ -336,7 +336,7 @@ int main() {
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
 										userFDArray[i]->MessageQueueing(userNumberMessage);
-										cout << userNumberMessage[0] << userNumberMessage[1] << userNumberMessage[2] << userNumberMessage[3] << endl;
+										cout << (int)userNumberMessage[0] << (int)userNumberMessage[1] << (int)userNumberMessage[2] << (int)userNumberMessage[3] << endl;
 								}
 							}
 							break;
