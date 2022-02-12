@@ -362,7 +362,9 @@ int main() {
 
 							//새로운 유저가 도착했다고 알려줌
 							for (int j = 1; j < USER_MAXIMUM; j++) {
-								if (pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
+								char currentUserMessage[5];
+								memcpy(currentUserMessage, message, 5);
+								if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
 							}
 
 							break;
@@ -389,7 +391,9 @@ int main() {
 
 						//새로운 유저가 도착했다고 알려줌
 						for (int j = 1; j < USER_MAXIMUM; j++) {
-							if (pollFDArray[j].fd != -1) write(pollFDArray[j].fd, message, 5);
+							char currentUserMessage[5];
+							memcpy(currentUserMessage, message, 5);
+							if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
 						}
 
 						break;
