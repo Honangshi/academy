@@ -36,6 +36,15 @@ using namespace std;
 void* MessageSendThread(void* args);
 //전방선언//
 
+
+//전역변수 선언란//
+//받는 버퍼
+char buffRecv[BUFF_SIZE];
+//주는 버버
+char buffSend[BUFF_SIZE];
+
+//전연변수 선언란//
+
 struct pollfd pollFDArray[USER_MAXIMUM];
 class UserData* userFDArray[USER_MAXIMUM];
 
@@ -119,13 +128,6 @@ public:
 
 
 
-//전역변수 선언란//
-//받는 버퍼
-char buffRecv[BUFF_SIZE];
-//주는 버버
-char buffSend[BUFF_SIZE];
-
-//전연변수 선언란//
 
 //currentFD는 현재 리슨 소켓으로 사용할 녀석을 넣어줌
 bool StartServer(int* currentFD) {
