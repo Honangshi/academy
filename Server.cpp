@@ -252,7 +252,7 @@ int main() {
 		pollFDArray[0].revents = 0;
 
 		//스레드 실행
-		pthread_t senderThread = nullptr;
+		pthread_t senderThread;
 		if (pthread_create(&senderThread, nullptr, MessageSendThread, nullptr)) {
 			//스레드가 정상적으로 실행되면 0리턴함
 			cout << "스레드 생성 실패" << endl;
