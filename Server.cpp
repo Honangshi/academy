@@ -190,7 +190,7 @@ void CheckMessage(int userNumber, char receive[], int length) {
 					char* currentMessage;
 					memcpy(currentMessage, value, length);
 					//유저한테 채팅내용을 전달해줌
-					userFDArray[i]->MessageQueueing();
+					userFDArray[i]->MessageQueueing(currentMessage);
 					//write(pollFDArray[i].fd, receive, length - 1);
 				}
 			}
