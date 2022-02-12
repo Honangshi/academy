@@ -22,6 +22,7 @@
 #include <poll.h>
 
 #include <queue>
+#include <pthread.h>
 
 //얼마나 시간이 니났는지 체크를 해야 틱레이트 계산 가능
 #include <sys/time.h>
@@ -250,9 +251,18 @@ int main() {
 		pollFDArray[0].events = POLLIN;
 		pollFDArray[0].revents = 0;
 
+		//스레드 실행
+		pthread_t* senderThread = nullptr;
+		if (pthread_create(sendgerThread, nullptr, MessageSendThread, nullptr)) {
+			//스레드가 정상적으로 실행되면 0리턴함
+			cout << "스레드 생성 실패" << endl;
+			return -4;
+		}
+
 		//무한 반복!
 		for (;;)
 		{
+
 			//기다려요! 만약에 누군가가 저한테 메세지를 건네준다면! 그 때에서야 제가 움직이는 거에요!
 			//메세지가 있는지 없는지를 확인하는 방법!
 			result = poll(pollFDArray, USER_MAXIMUM, -1);
@@ -388,10 +398,28 @@ int main() {
 
 			};
 		};
+		//끝나면 스레드 종료!
+		pthread_cancel(&senderThread);
 	}
 	catch (exception& e) {
 		cout << e.what() << endl;
 	}
+
+
+	cout << "서버가 종료되었습니다." << endl;
 	return -4;
 }
 
+
+
+void MessageSendThread() {
+	for (;;) {
+		//poll은 연락이 올 때까지 기달림
+		for (int i = 0; i < USER_MAXIMUM; i++) {
+			if (pollFDArray[i].fd >= 0) {
+				memset(buffSend, 0, BUFF_SIZE);
+				userFDArray[i]->MessageSend();
+			}
+		}
+	}
+}
