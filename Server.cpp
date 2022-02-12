@@ -332,11 +332,11 @@ int main() {
 									userNumberMessage[0] = Join;
 									//이미 있던 유저의 아이디 전달
 									intChanger.IntValue = j;
-									cout << j << endl;
 									for (int k = 0; k < 4; k++) 
 										message[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
 										userFDArray[i]->MessageQueueing(userNumberMessage);
+										cout << userNumberMessage[0] << userNumberMessage[1] << userNumberMessage[2] << userNumberMessage[3] << endl;
 								}
 							}
 							break;
