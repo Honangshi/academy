@@ -36,8 +36,6 @@ using namespace std;
 void* MessageSendThread(void* args);
 //전방선언//
 
-struct pollfd pollFDArray[USER_MAXIMUM];
-class UserData* userFDArray[USER_MAXIMUM];
 
 //union은 저 두개를 같은 메모리에서 사용하게 함
 union FloatUnion
@@ -103,9 +101,14 @@ public:
 };
 
 
+struct pollfd pollFDArray[USER_MAXIMUM];
+class UserData* userFDArray[USER_MAXIMUM];
 
 //전역변수 선언란//
-
+//받는 버퍼
+char buffRecv[BUFF_SIZE];
+//주는 버버
+char buffSend[BUFF_SIZE];
 
 //전연변수 선언란//
 
@@ -226,10 +229,7 @@ int main() {
 		struct sockaddr_in listenSocket, connectSocket;
 		socklen_t addressSize;
 
-		//받는 버퍼
-		char buffRecv[BUFF_SIZE];
-		//주는 버버
-		char buffSend[BUFF_SIZE];
+
 
 		//0으로 초기화
 		memset(buffRecv, 0, sizeof(buffRecv));
@@ -252,8 +252,8 @@ int main() {
 		pollFDArray[0].revents = 0;
 
 		//스레드 실행
-		pthread_t* senderThread = nullptr;
-		if (pthread_create(sendgerThread, nullptr, MessageSendThread, nullptr)) {
+		pthread_t senderThread = nullptr;
+		if (pthread_create(&senderThread, nullptr, MessageSendThread, nullptr)) {
 			//스레드가 정상적으로 실행되면 0리턴함
 			cout << "스레드 생성 실패" << endl;
 			return -4;
@@ -399,7 +399,7 @@ int main() {
 			};
 		};
 		//끝나면 스레드 종료!
-		pthread_cancel(*senderThread);
+		pthread_cancel(senderThread);
 	}
 	catch (exception& e) {
 		cout << e.what() << endl;
