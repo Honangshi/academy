@@ -187,7 +187,7 @@ void CheckMessage(int userNumber, char receive[], int length) {
 			cout << value << endl;
 			for (int i = 1; i < USER_MAXIMUM; i++) {
 				if (userFDArray[i] != nullptr) {
-					char* currentMessage;
+					char* currentMessage = new char[length];
 					memcpy(currentMessage, value, length);
 					//유저한테 채팅내용을 전달해줌
 					userFDArray[i]->MessageQueueing(currentMessage);
