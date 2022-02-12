@@ -89,6 +89,8 @@ public:
 		//pollfd가 잘못 들어와 있을 때
 		if (FDNumber < 0 || pollFDArray[FDNumber].fd <= 1) return;
 
+		memset(buffSend, 0, BUFF_SIZE);
+
 		//현재 메세지를 전달, write는 실패했을 때 -1 리턴
 		if (write(pollFDArray[FDNumber].fd, currentMessage, BUFF_SIZE) != -1) {
 			//성공했을 때에만 빼주기
