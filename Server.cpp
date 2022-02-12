@@ -88,7 +88,7 @@ public:
 			messageQueue.pop();
 
 			//메세지 보냈으니 메모리에서도 제거
-			delete currentMessage
+			delete currentMessage;
 		}
 	}
 
