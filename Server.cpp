@@ -337,7 +337,7 @@ int main() {
 									//이미 있던 유저의 아이디 전달
 									intChanger.IntValue = j;
 									for (int k = 0; k < 4; k++) 
-										message[k + 1] = intChanger.charArray[k];
+										userNumberMessage[k + 1] = intChanger.charArray[k];
 										//새로 들어온 유저에게 이 유저를 전달
 										userFDArray[i]->MessageQueueing(userNumberMessage);
 										cout << (int)userNumberMessage[0] << (int)userNumberMessage[1] << (int)userNumberMessage[2] << (int)userNumberMessage[3] << endl;
