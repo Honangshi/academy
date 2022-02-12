@@ -326,7 +326,6 @@ int main() {
 										userFDArray[i]->MessageQueueing(userNumberMessage);
 								}
 							}
-							userFDArray[i]->MessageSend();
 							break;
 						};
 					};
