@@ -70,6 +70,7 @@ public:
 	float locationX, locationY, locationZ;
 
 	void MessageQueueing(char* wantMessage) {
+		if (messageQueue == nullptr) return;
 		//원하는 메세지를 유저에게 전달 but 즉시 전달 x
 		//다음 틱레이트에 도착했을 때 보냄
 		messageQueue->push(wantMessage);
@@ -82,6 +83,12 @@ public:
 
 		//가장 오래 기다린 메세지
 		char* currentMessage = messageQueue->front();
+
+		//메세지 큐에서 들어온 것 확인했지만 아무것도 없으면 그냥 리턴
+		if (currentMessage == nullptr) return;
+		//pollfd가 잘못 들어와 있을 때
+		if (FDNumber < 0 || pollFDArray[FDNumber].fd <= 1) return;
+
 		//현재 메세지를 전달, write는 실패했을 때 -1 리턴
 		if (write(pollFDArray[FDNumber].fd, currentMessage, BUFF_SIZE) != -1) {
 			//성공했을 때에만 빼주기
@@ -98,6 +105,10 @@ public:
 	}
 
 	~UserData() {
+		while (!messageQueue->empty()) {
+			delete messageQueue->front();
+			messageQueue->pop();
+		}
 		delete messageQueue;
 		cout << "유저 연결이 종료되었습니다." << endl;
 	}
@@ -362,9 +373,11 @@ int main() {
 
 							//새로운 유저가 도착했다고 알려줌
 							for (int j = 1; j < USER_MAXIMUM; j++) {
-								char* currentUserMessage = new char[5];
-								memcpy(currentUserMessage, message, 5);
-								if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
+								if (userFDArray[j] != nullptr) {
+									char* currentUserMessage = new char[5];
+									memcpy(currentUserMessage, message, 5);
+									if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
+								}
 							}
 
 							break;
@@ -391,9 +404,11 @@ int main() {
 
 						//새로운 유저가 도착했다고 알려줌
 						for (int j = 1; j < USER_MAXIMUM; j++) {
-							char* currentUserMessage = new char[5];
-							memcpy(currentUserMessage, message, 5);
-							if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
+							if (userFDArray[j] != nullptr) {
+								char* currentUserMessage = new char[5];
+								memcpy(currentUserMessage, message, 5);
+								if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
+							}
 						}
 
 						break;
@@ -426,7 +441,7 @@ void* MessageSendThread(void* args) {
 		//poll은 연락이 올 때까지 기달림
 		for (int i = 0; i < USER_MAXIMUM; i++) {
 			//유저가 있다면 전달시도
-			if (userFDArray[i] != nullptr) {
+			if (pollFDArray[i].fd >= 0 && userFDArray[i] != nullptr) {
 				memset(buffSend, 0, BUFF_SIZE);
 				userFDArray[i]->MessageSend();
 			}
