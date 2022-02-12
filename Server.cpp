@@ -313,7 +313,7 @@ int main() {
 									memcpy(currentUserMessage, message, 5);
 
 									//모든 유저들에게 새로운 유저 출현 알림
-									userFDArray[i]->messageQueueing(currentUserMessage);
+									userFDArray[i]->MessageQueueing(currentUserMessage);
 
 									//원래 유저가 있었던 것 알려줌
 									char* userNumberMessage = new char[5];
