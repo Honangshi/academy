@@ -230,13 +230,13 @@ void CheckMessage(int userNumber, char receive[], int length) {
 
 
 			for (int i = 0; i < 4; i++) {
-				currentMessage[i + 6] = receive[i + 1];
+				currentMessage[i + 6] = receive[i + 5];
 				floatChanger.charArray[i] = receive[i + 5];
 			}
 			userFDArray[userNumber]->destinationY = floatChanger.floatValue;
 
 			for (int i = 0; i < 4; i++) {
-				currentMessage[i + 10] = receive[i + 1];
+				currentMessage[i + 10] = receive[i + 9];
 				floatChanger.charArray[i] = receive[i + 9];
 			}
 			userFDArray[userNumber]->destinationZ = floatChanger.floatValue;
