@@ -416,7 +416,7 @@ int main() {
 							if (i != j && pollFDArray[j].fd != -1 && userFDArray[j] != nullptr) {
 								char* currentUserMessage = new char[5];
 								memcpy(currentUserMessage, message, 5);
-								if (userFDArray[j] != nullptr) userFDArray[j]->MessageQueueing(currentUserMessage);
+								userFDArray[j]->MessageQueueing(currentUserMessage);
 							}
 						}
 
