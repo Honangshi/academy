@@ -288,6 +288,7 @@ int main() {
 
 		if (!MySQLInitialize()) return -4;
 
+		SaveUser("Test", "D");
 
 		if (StartServer(&listenFD)) return -4;
 
