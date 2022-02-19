@@ -14,17 +14,17 @@ MySQL_ROW queryRow;
 
 bool MySQLInitialize() {
 	if (connectedDatebase = mysql_init((MYSQL*)nullptr)) {
-		cout << "MySQL 초기화 실패" << endl;
+		cout << "Cannot Initialize MySQL" << endl;
 		return false;
 	}
-	cout << "MySQL 초기화 성공" << endl;
+	cout << "MySQL successfully Initialize" << endl;
 
 	//						mysql 저장할 위치	mysql의 주소
 	if (!(mysql_real_connect(connectedDatebase, "localhost", "root", "1234", nullptr, 3306, nullptr, 0))) {
-		cout << "MySQL 연결 실패" << endl;
+		cout << "Failed to connect MySQL" << endl;
 		return false;
 	}
-	cout << "MySQL 연결 성공" << endl;
+	cout << "Successfully Connected to MySQL" << endl;
 }
 
 void MySQLClose() {
