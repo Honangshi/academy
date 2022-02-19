@@ -42,7 +42,7 @@ void MySQLClose() {
 }
 
 void SaveUser(string id, string color) {
-	string query "INSERT INTO userdata(ID, Color) VALUES (";
+	string query = "INSERT INTO userdata(ID, Color) VALUES (";
 	query += id;
 	query += ", ";
 	query += color;
