@@ -13,7 +13,7 @@ MYSQL_RES* queryResult;
 MYSQL_ROW queryRow;
 
 bool MySQLInitialize() {
-	if (connectedDatebase = mysql_init((MYSQL*)nullptr)) {
+	if (!(connectedDatebase = mysql_init((MYSQL*)nullptr))) {
 		cout << "Cannot Initialize MySQL" << endl;
 		return false;
 	}
