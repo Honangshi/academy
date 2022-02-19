@@ -25,9 +25,21 @@ bool MySQLInitialize() {
 		return false;
 	}
 	cout << "Successfully Connected to MySQL" << endl;
+
+
+	//mysql에 질의문 던짐
+	if (mysql_query(connectedDatebase, "USE ServerData") != 0) {
+		cout << "Database is invalid" << endl;
+		return false;
+	}
+
+	cout << "Database has open" << endl;
 	return true;
 }
 
 void MySQLClose() {
 	mysql_close(connectedDatebase);
+}
+
+void SaveUser() {
 }
