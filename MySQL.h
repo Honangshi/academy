@@ -4,13 +4,13 @@
 using namespace std;
 
 //연결된 SQL 저장
-MySQL* connectedDatebase;
+MYSQL* connectedDatebase;
 
 //DB에 커리를 한다 = 정보를 긁어옴
 MYSQL_RES* queryResult;
 
 //긁어온 정보의 1줄
-MySQL_ROW queryRow;
+MYSQL_ROW queryRow;
 
 bool MySQLInitialize() {
 	if (connectedDatebase = mysql_init((MYSQL*)nullptr)) {
