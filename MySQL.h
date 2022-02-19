@@ -28,7 +28,7 @@ bool MySQLInitialize() {
 
 
 	//mysql에 질의문 던짐
-	if (mysql_query(connectedDatebase, "USE ServerData") != 0) {
+	if (mysql_query(connectedDatebase, "USE serverdata") != 0) {
 		cout << "Database is invalid" << endl;
 		return false;
 	}
