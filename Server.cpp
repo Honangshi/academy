@@ -30,6 +30,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "ServerEnum.h"
+#include "MySQL.h"
 
 using namespace std;
 //전방선언//
@@ -285,6 +286,9 @@ int main() {
 		memset(buffRecv, 0, sizeof(buffRecv));
 		memset(buffSend, 0, sizeof(buffSend));
 
+		if (!MySQLInitialize()) return -4;
+
+
 		if (StartServer(&listenFD)) return -4;
 
 		cout << "서버가 정상적으로 실행되었습니다" << endl;
@@ -468,7 +472,7 @@ int main() {
 		cout << e.what() << endl;
 	}
 
-
+	MySQLClose();
 	cout << "서버가 종료되었습니다." << endl;
 	return -4;
 }
