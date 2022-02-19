@@ -41,7 +41,7 @@ void MySQLClose() {
 	mysql_close(connectedDatebase);
 }
 
-void SaveUser(string *id, string color) {
+void SaveUser(string id, string color) {
 	string query "INSERT INTO userdata(ID, Color) VALUES (";
 	query += id;
 	query += ", ";
