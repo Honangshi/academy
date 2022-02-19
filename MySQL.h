@@ -25,6 +25,7 @@ bool MySQLInitialize() {
 		return false;
 	}
 	cout << "Successfully Connected to MySQL" << endl;
+	return true;
 }
 
 void MySQLClose() {
