@@ -12,6 +12,7 @@
 //틱레이트 설정
 #define TICK_RATE 16
 
+#include <string>
 #include <iostream>
 //클라이언트가 직접 주소와 포트를 이용해서 들어오라고 소켓을 사용함
 #include <sys/socket.h>
