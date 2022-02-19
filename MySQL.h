@@ -72,7 +72,7 @@ void SaveUser(string id, string color) {
 		query += color;
 		query += "\" WHERE ID = \"";
 		query += id;
-		query += "\";;
+		query += "\";";
 
 	}
 	else {
