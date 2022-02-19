@@ -42,11 +42,11 @@ void MySQLClose() {
 }
 
 void SaveUser(string id, string color) {
-	string query = "INSERT INTO userdata(ID, Color) VALUES (";
+	string query = "INSERT INTO userdata(ID, Color) VALUES (\"";
 	query += id;
-	query += ", ";
+	query += "\", \"";
 	query += color;
-	query += ");";
+	query += "\");";
 
 	if (mysql_query(connectedDatebase, query.c_str()) != 0) {
 		cout << "Cannot Save Data" << endl;
